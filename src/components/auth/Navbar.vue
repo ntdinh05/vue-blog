@@ -14,6 +14,9 @@
       />
     </div>
     <div class="flex items-center gap-4 pr-5">
+      <button @click="goToProfile" class="bg-gray-100 text-black rounded-full py-1 px-2 font-semibold border-black border-2 hover:bg-black hover:text-white transition-colors w-25">
+        Profile
+      </button>
       <button @click="goToLogin" class="bg-black text-white rounded-full py-1 px-2 font-semibold border-black border-2 hover:bg-white hover:text-black hover:border-black transition-color w-25">
         Login
       </button>
@@ -31,6 +34,10 @@
   
   const goToHome = () => {
     router.push('/')
+  }
+
+  const goToProfile = () => {
+    router.push('/profile')
   }
 
   const goToLogin = () => {

@@ -61,7 +61,7 @@
                   @dragover.prevent="handleDragOver"
                   @dragleave.prevent="handleDragLeave"
                   @drop.prevent="handlePost1Drop"
-                  class="w-full h-64 bg-gradient-to-br from-green-400 via-green-500 to-green-700 rounded-lg border-2 border-black flex items-center justify-center group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  class="w-full h-64 bg-gradient-to-br from-green-400 via-green-500 to-green-700 rounded-lg border-2 border-black flex items-center justify-center transition-transform duration-300 cursor-pointer hover:scale-105"
                   :class="{ 'border-blue-500 bg-blue-50': isDragging }"
                 >
                   <div class="text-center text-white">
@@ -70,6 +70,10 @@
                     <p class="text-sm opacity-75">or drag & drop here</p>
                   </div>
                 </div>
+              </div>
+              <div v-else>
+                <img src="/images/26609381-FCB2-4329-8D8F-0315CAB29E4E.png"
+                />
               </div>
             </div>
 
@@ -122,7 +126,7 @@
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full border-2 border-blog-primary flex items-center justify-center text-white font-bold shadow-md">
-                  N
+                  <span class="text-lg">M</span>
                 </div>
                 <div>
                   <h3 class="font-bold hover:text-blog-accent cursor-pointer transition-colors">minhtendi</h3>
@@ -160,27 +164,8 @@
               
               <!-- Image Upload Placeholder (when no image) -->
               <div v-else>
-                <input 
-                  ref="post2FileInput"
-                  type="file" 
-                  accept="image/*" 
-                  @change="handlePost2ImageUpload"
-                  class="hidden"
+                <img src="/images/2861660C-D9D6-4882-8634-9876354E5108.png"
                 />
-                <div 
-                  @click="triggerPost2Upload"
-                  @dragover.prevent="handleDragOver"
-                  @dragleave.prevent="handleDragLeave"
-                  @drop.prevent="handlePost2Drop"
-                  class="w-full h-64 bg-gradient-to-br from-green-400 via-green-500 to-green-700 rounded-lg border-2 border-black flex items-center justify-center group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                  :class="{ 'border-blue-500 bg-blue-50': isDragging }"
-                >
-                  <div class="text-center text-white">
-                    <div class="text-4xl mb-2">📷</div>
-                    <p class="font-semibold">Click to add image</p>
-                    <p class="text-sm opacity-75">or drag & drop here</p>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -257,7 +242,126 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import CreatePost from '../posts/CreatePost.vue'
+import { ref } from 'vue'
+
+// Image upload states
+const post1Image = ref(null)
+const post2Image = ref(null)
+const post1FileInput = ref(null)
+const post2FileInput = ref(null)
+const isDragging = ref(false)
+const showImageModal = ref(false)
+const modalImage = ref('')
+
+// Post 1 Image Functions
+const triggerPost1Upload = () => {
+  post1FileInput.value?.click()
+}
+
+const handlePost1ImageUpload = (event) => {
+  const file = event.target.files[0]
+  console.log('Post1 File selected:', file)
+  if (file && file.type.startsWith('image/')) {
+    console.log('Post1 File is valid image:', file.type, file.size)
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      console.log('Post1 FileReader loaded, result length:', e.target.result.length)
+      post1Image.value = e.target.result
+      console.log('post1Image updated:', post1Image.value ? 'YES' : 'NO')
+    }
+    reader.onerror = (e) => {
+      console.error('Post1 FileReader error:', e)
+    }
+    reader.readAsDataURL(file)
+  } else {
+    console.log('Post1 File is not valid:', file ? file.type : 'No file')
+  }
+}
+
+const handlePost1Drop = (event) => {
+  isDragging.value = false
+  const files = event.dataTransfer.files
+  if (files.length > 0 && files[0].type.startsWith('image/')) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      post1Image.value = e.target.result
+    }
+    reader.readAsDataURL(files[0])
+  }
+}
+
+const removePost1Image = () => {
+  post1Image.value = null
+  if (post1FileInput.value) {
+    post1FileInput.value.value = ''
+  }
+}
+
+// Post 2 Image Functions
+const triggerPost2Upload = () => {
+  post2FileInput.value?.click()
+}
+
+const handlePost2ImageUpload = (event) => {
+  const file = event.target.files[0]
+  console.log('Post2 File selected:', file)
+  if (file && file.type.startsWith('image/')) {
+    console.log('Post2 File is valid image:', file.type, file.size)
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      console.log('Post2 FileReader loaded, result length:', e.target.result.length)
+      post2Image.value = e.target.result
+      console.log('post2Image updated:', post2Image.value ? 'YES' : 'NO')
+    }
+    reader.onerror = (e) => {
+      console.error('Post2 FileReader error:', e)
+    }
+    reader.readAsDataURL(file)
+  } else {
+    console.log('Post2 File is not valid:', file ? file.type : 'No file')
+  }
+}
+
+const handlePost2Drop = (event) => {
+  isDragging.value = false
+  const files = event.dataTransfer.files
+  if (files.length > 0 && files[0].type.startsWith('image/')) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      post2Image.value = e.target.result
+    }
+    reader.readAsDataURL(files[0])
+  }
+}
+
+const removePost2Image = () => {
+  post2Image.value = null
+  if (post2FileInput.value) {
+    post2FileInput.value.value = ''
+  }
+}
+
+// Drag and Drop Handlers
+const handleDragOver = (event) => {
+  isDragging.value = true
+}
+
+const handleDragLeave = (event) => {
+  isDragging.value = false
+}
+
+// Image Modal Functions
+const openImageModal = (imageSrc) => {
+  modalImage.value = imageSrc
+  showImageModal.value = true
+}
+
+const closeImageModal = () => {
+  showImageModal.value = false
+  modalImage.value = ''
+}
 </script>
 
 <style scoped>

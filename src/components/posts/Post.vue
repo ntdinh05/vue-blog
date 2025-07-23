@@ -20,13 +20,6 @@
             <p class="text-sm text-blog-secondary">{{ formattedDate }}</p>
           </div>
         </div>
-        <button 
-          v-if="showMenu"
-          @click="$emit('menuClick', post)"
-          class="text-xl hover:bg-gray-100 p-2 rounded-full transition-colors"
-        >
-          ⋯
-        </button>
       </div>
     </div>
 
@@ -58,11 +51,18 @@
       <p class="text-gray-700 mb-4 leading-relaxed">
         {{ truncatedContent }}
         <span 
-          v-if="post.content && post.content.length > maxContentLength"
-          @click="$emit('readMore', post)"
-          class="text-blue-600 cursor-pointer hover:underline"
+          v-if="post.content && post.content.length > maxContentLength && !isExpanded"
+          @click="toggleExpanded"
+          class="text-blue-600 cursor-pointer hover:underline ml-1"
         >
           See more...
+        </span>
+        <span 
+          v-if="isExpanded && post.content && post.content.length > maxContentLength"
+          @click="toggleExpanded"
+          class="text-blue-600 cursor-pointer hover:underline ml-1"
+        >
+          Show less
         </span>
       </p>
 
@@ -219,6 +219,7 @@ const emit = defineEmits([
   'comment',
   'share',
   'readMore',
+  'showLess',
   'tagClick',
   'showAllComments',
   'newComment'
@@ -226,6 +227,7 @@ const emit = defineEmits([
 
 // Reactive data
 const newComment = ref('')
+const isExpanded = ref(false)
 
 // Computed properties
 const authorInitial = computed(() => {
@@ -257,10 +259,17 @@ const formattedDate = computed(() => {
 const truncatedContent = computed(() => {
   if (!props.post.content) return ''
   
+  // If expanded, show full content
+  if (isExpanded.value) {
+    return props.post.content
+  }
+  
+  // If content is short enough, show all
   if (props.post.content.length <= props.maxContentLength) {
     return props.post.content
   }
   
+  // Otherwise show truncated version
   return props.post.content.substring(0, props.maxContentLength) + '...'
 })
 
@@ -277,6 +286,17 @@ const submitComment = () => {
       comment: newComment.value.trim()
     })
     newComment.value = ''
+  }
+}
+
+const toggleExpanded = () => {
+  isExpanded.value = !isExpanded.value
+  
+  // Emit event to parent component if needed
+  if (isExpanded.value) {
+    emit('readMore', props.post)
+  } else {
+    emit('showLess', props.post)
   }
 }
 </script>

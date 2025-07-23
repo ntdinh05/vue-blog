@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-100 font-mono">
-    <!-- Navigation -->
-    <Navbar />
     
     <!-- Profile Header -->
     <div class="bg-white border-b-2 border-black">

@@ -3,18 +3,18 @@
     <!-- Floating Action Button -->
     <button 
       @click="toggleCreate"
-      class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 z-50 flex items-center justify-center text-2xl border-2 border-white"
+      class="fixed bottom-6 right-6 w-14 h-14 bg-black text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 z-50 flex items-center justify-center text-2xl border-2 border-white"
       :class="{ 'rotate-45': isCreateOpen }"
     >
       {{ isCreateOpen ? '×' : '+' }}
     </button>
 
-    <!-- Slide-up Create Panel -->
+    <!-- Slide-down Create Panel -->
     <div 
-      class="fixed inset-x-0 bottom-0 bg-white border-t-2 border-blog-primary shadow-2xl transition-transform duration-500 z-40"
-      :class="isCreateOpen ? 'transform translate-y-0' : 'transform translate-y-full'"
+      class="fixed inset-x-0 top-0 bg-white border-b-2 border-blog-primary shadow-2xl transition-transform duration-500 z-50 h-1/3"
+      :class="isCreateOpen ? 'transform translate-y-0' : 'transform -translate-y-full'"
     >
-      <div class="max-w-2xl mx-auto p-6">
+      <div class="max-w-2xl mx-auto p-6 h-full flex flex-col">
         <h2 class="text-xl font-bold mb-4 text-center">Create New Post</h2>
         
         <!-- Post Type Selector -->
@@ -36,7 +36,7 @@
         <textarea 
           v-model="postContent"
           placeholder="What's on your mind?"
-          class="w-full h-32 p-4 border-2 border-blog-primary rounded-lg resize-none focus:outline-none focus:ring-4 focus:ring-blog-accent focus:ring-opacity-30 focus:border-blog-accent transition-all duration-200"
+          class="w-full h-32 p-4 border-2 border-blog-primary rounded-lg resize-none focus:outline-none focus:ring-4 focus:ring-blog-accent focus:ring-opacity-30 focus:border-blog-accent transition-all duration-200 min-h-0"
         ></textarea>
 
         <!-- Action Buttons -->
